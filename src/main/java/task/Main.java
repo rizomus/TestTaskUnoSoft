@@ -22,8 +22,8 @@ public class Main {
 
         LinkedList<String> table = new LinkedList<>();                          // lines from file
         String token;                                                           // [column number + item] (like 3"7894561230")
-        HashMap<String, Subgroup> tokenGroup = new HashMap<>();
-        HashSet<Subgroup> groups = new HashSet<>();
+        HashMap<String, ChainedLine> tokenLine = new HashMap<>();
+        HashSet<ChainedLine> groups = new HashSet<>();
         HashSet<String> lineSet = new HashSet<>();                              // check for duplicates
 
 //        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng.txt"))) {
@@ -42,23 +42,23 @@ public class Main {
                 if (!matcher.find()) {
                     table.add(line);
                     String[] rowElements = line.split(";");
-                    Subgroup currentGroup = new Subgroup(newGroupIndex);
-                    Subgroup oldGroup = null;
-                    groups.add(currentGroup);
+                    ChainedLine currentLine = new ChainedLine(newGroupIndex);
+                    ChainedLine oldLine = null;
+                    groups.add(currentLine);
 
                     for (int i = 0; i < rowElements.length; i++) {
                         if (!(rowElements[i].equals("\"\"") || rowElements[i].equals(""))) {
                             token = i + rowElements[i];
 
-                            if (tokenGroup.containsKey(token)) {
-                                oldGroup = tokenGroup.get(token);
-                                if (oldGroup.getParent() != null) {
-                                    currentGroup.addChildren(oldGroup.getUpperParent());
+                            if (tokenLine.containsKey(token)) {
+                                oldLine = tokenLine.get(token);
+                                if (oldLine.getParent() != null) {
+                                    currentLine.addChildren(oldLine.getUpperParent());
                                 } else {
-                                    currentGroup.addChildren(oldGroup);
+                                    currentLine.addChildren(oldLine);
                                 }
                             } else {
-                                tokenGroup.put(token, currentGroup);
+                                tokenLine.put(token, currentLine);
                             }
                         }
                     }
@@ -74,11 +74,11 @@ public class Main {
         }
 
 
-        TreeMap<Integer, HashSet<Subgroup>> groupSort = new TreeMap<>();
+        TreeMap<Integer, HashSet<ChainedLine>> groupSort = new TreeMap<>();
         int size = 0;
         int groupCount = 0;
 
-        for (Subgroup group: groups) {
+        for (ChainedLine group: groups) {
             if (group.getParent() == null) {
                 size = group.size();
                 if (!groupSort.containsKey(size)) {
@@ -88,16 +88,14 @@ public class Main {
                 groupCount++;
             }
         }
-        System.out.println(groupSort.descendingKeySet());
-
-        System.out.println("Количество групп с более чем одним элементом: " + (groupCount - groupSort.get(1).size()));
+        System.out.println("Groups with more then 1 element: " + (groupCount - groupSort.get(1).size()));
         System.out.println(Math.round((System.currentTimeMillis() - start) / 1000) + " sec");
 
         groupCount = 0;
         for (int n : groupSort.descendingKeySet()) {
-            HashSet<Subgroup> groupCluster = groupSort.get(n);
-            for (Subgroup group: groupCluster) {
-                System.out.println("Группа " + groupCount);
+            HashSet<ChainedLine> groupCluster = groupSort.get(n);
+            for (ChainedLine group: groupCluster) {
+                System.out.println("Group " + groupCount);
                 for (int index: group.getLineIndexes()) {
                     System.out.println("    line: " + table.get(index));
                 }

@@ -3,27 +3,27 @@ package task;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class Subgroup {
+public class ChainedLine {
     final int index;
-    private Subgroup parent = null;
-    HashSet<Subgroup> children = new HashSet<>();
+    private ChainedLine parent = null;
+    HashSet<ChainedLine> children = new HashSet<>();
     HashSet<Integer> lineIndexes = new HashSet<>();
-    LinkedList<Subgroup> stack = new LinkedList<>();
+    LinkedList<ChainedLine> stack = new LinkedList<>();
 
-    public Subgroup(int index) {
+    public ChainedLine(int index) {
         this.index = index;
     }
 
-    public Subgroup getParent() {
+    public ChainedLine getParent() {
         return parent;
     }
 
-    public Subgroup getUpperParent() {
-        Subgroup upperParent = this.parent;
+    public ChainedLine getUpperParent() {
+        ChainedLine upperParent = this.parent;
         if (parent == null) {
             return null;
         } else {
-            Subgroup par = this.parent;
+            ChainedLine par = this.parent;
             while (par != null) {
                 upperParent = par;
                 par = upperParent.parent;
@@ -33,7 +33,7 @@ public class Subgroup {
         return upperParent;
     }
 
-    public void addChildren(Subgroup group) {
+    public void addChildren(ChainedLine group) {
         if (group != this) {
             group.parent = this;
             this.children.add(group);
@@ -45,7 +45,7 @@ public class Subgroup {
         stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
-            Subgroup child = stack.pollFirst();
+            ChainedLine child = stack.pollFirst();
             stack.addAll(child.children);
             count++;
         }
@@ -53,11 +53,11 @@ public class Subgroup {
     }
     public HashSet<Integer> getLineIndexes() {
         lineIndexes.add(this.index);
-        LinkedList<Subgroup> stack = new LinkedList<>();
+        LinkedList<ChainedLine> stack = new LinkedList<>();
         stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
-            Subgroup child = stack.pollFirst();
+            ChainedLine child = stack.pollFirst();
             stack.addAll(child.children);
             lineIndexes.add(child.index);
         }
