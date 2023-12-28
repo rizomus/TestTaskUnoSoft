@@ -22,8 +22,8 @@ public class Main {
 
         LinkedList<String> table = new LinkedList<>();                          // lines from file
         String token;                                                           // [column number + item] (like 3"7894561230")
-        HashMap<String, ChainedLine> tokenLine = new HashMap<>();
-        HashSet<ChainedLine> groups = new HashSet<>();
+        HashMap<String, ChainedLines> tokenLine = new HashMap<>();
+        HashSet<ChainedLines> groups = new HashSet<>();
         HashSet<String> lineSet = new HashSet<>();                              // check for duplicates
 
 //        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng.txt"))) {
@@ -42,8 +42,8 @@ public class Main {
                 if (!matcher.find()) {
                     table.add(line);
                     String[] rowElements = line.split(";");
-                    ChainedLine currentLine = new ChainedLine(newGroupIndex);
-                    ChainedLine oldLine = null;
+                    ChainedLines currentLine = new ChainedLines(newGroupIndex);
+                    ChainedLines oldLine = null;
                     groups.add(currentLine);
 
                     for (int i = 0; i < rowElements.length; i++) {
@@ -53,9 +53,9 @@ public class Main {
                             if (tokenLine.containsKey(token)) {
                                 oldLine = tokenLine.get(token);
                                 if (oldLine.getParent() != null) {
-                                    currentLine.addChildren(oldLine.getUpperParent());
+                                    currentLine.addChild(oldLine.getUpperParent());
                                 } else {
-                                    currentLine.addChildren(oldLine);
+                                    currentLine.addChild(oldLine);
                                 }
                             } else {
                                 tokenLine.put(token, currentLine);
@@ -74,11 +74,11 @@ public class Main {
         }
 
 
-        TreeMap<Integer, HashSet<ChainedLine>> groupSort = new TreeMap<>();
+        TreeMap<Integer, HashSet<ChainedLines>> groupSort = new TreeMap<>();
         int size = 0;
         int groupCount = 0;
 
-        for (ChainedLine group: groups) {
+        for (ChainedLines group: groups) {
             if (group.getParent() == null) {
                 size = group.size();
                 if (!groupSort.containsKey(size)) {
@@ -93,8 +93,8 @@ public class Main {
 
         groupCount = 0;
         for (int n : groupSort.descendingKeySet()) {
-            HashSet<ChainedLine> groupCluster = groupSort.get(n);
-            for (ChainedLine group: groupCluster) {
+            HashSet<ChainedLines> groupCluster = groupSort.get(n);
+            for (ChainedLines group: groupCluster) {
                 System.out.println("Group " + groupCount);
                 for (int index: group.getLineIndexes()) {
                     System.out.println("    line: " + table.get(index));
