@@ -26,15 +26,13 @@ public class Main {
         HashSet<Subgroup> groups = new HashSet<>();                             // lines, that need to be transferred to a new group
         HashSet<String> lineSet = new HashSet<>();                              // check for duplicates
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng-big.csv"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng.txt"))) {
 //        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line = reader.readLine();
             Pattern pattern = Pattern.compile("\\d+\"+\\d");
 
-            int lineIndex = 0;
             int newGroupIndex = 0;
             while (line != null) {
-//                System.out.println(lineIndex);
                 if (lineSet.contains(line)) {
                     line = reader.readLine();
                     continue;
@@ -64,7 +62,6 @@ public class Main {
                         }
                     }
                     newGroupIndex++;
-                    lineIndex++;
                 } else {
                     System.out.println("STRING NOT VALID");
                     System.out.println(line);
@@ -95,5 +92,17 @@ public class Main {
         System.out.println("Количество групп с более чем одним элементом: " + (groupCount - groupSort.get(1).size()));
         System.out.println(Math.round((System.currentTimeMillis() - start) / 1000) + " sec");
 
+        groupCount = 0;
+        for (int n : groupSort.descendingKeySet()) {
+            HashSet<Subgroup> groupCluster = groupSort.get(n);
+            for (Subgroup group: groupCluster) {
+                System.out.println("Группа " + groupCount);
+                for (int index: group.getLineIndexes()) {
+                    System.out.println("    line: " + table.get(index));
+                }
+                groupCount++;
+                System.out.println();
+            }
+        }
     }
 }

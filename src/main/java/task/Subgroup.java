@@ -46,4 +46,16 @@ public class Subgroup {
         }
         return count;
     }
+    public HashSet<Integer> getLineIndexes() {
+        HashSet<Integer> lineIndexes = new HashSet<>();
+        lineIndexes.add(this.index);
+        LinkedList<Subgroup> stack = new LinkedList<>();
+        stack.addAll(this.children);
+        while (stack.size() > 0) {
+            Subgroup child = stack.pollFirst();
+            stack.addAll(child.children);
+            lineIndexes.add(child.index);
+        }
+        return lineIndexes;
+    }
 }
