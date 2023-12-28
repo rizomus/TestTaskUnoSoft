@@ -3,27 +3,27 @@ package task;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-public class ChainedLines {
+public class ChainedLine {
     final int index;
-    private ChainedLines parent = null;
-    HashSet<ChainedLines> children = new HashSet<>();
+    private ChainedLine parent = null;
+    HashSet<ChainedLine> children = new HashSet<>();
     HashSet<Integer> lineIndexes = new HashSet<>();
-    LinkedList<ChainedLines> stack = new LinkedList<>();
+    LinkedList<ChainedLine> stack = new LinkedList<>();
 
-    public ChainedLines(int index) {
+    public ChainedLine(int index) {
         this.index = index;
     }
 
-    public ChainedLines getParent() {
+    public ChainedLine getParent() {
         return parent;
     }
 
-    public ChainedLines getUpperParent() {
-        ChainedLines upperParent = this.parent;
+    public ChainedLine getUpperParent() {
+        ChainedLine upperParent = this.parent;
         if (parent == null) {
             return null;
         } else {
-            ChainedLines par = this.parent;
+            ChainedLine par = this.parent;
             while (par != null) {
                 upperParent = par;
                 par = upperParent.parent;
@@ -33,7 +33,7 @@ public class ChainedLines {
         return upperParent;
     }
 
-    public void addChild(ChainedLines group) {
+    public void addChild(ChainedLine group) {
         if (group != this) {
             group.parent = this;
             this.children.add(group);
@@ -45,7 +45,7 @@ public class ChainedLines {
         stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
-            ChainedLines child = stack.pollFirst();
+            ChainedLine child = stack.pollFirst();
             stack.addAll(child.children);
             count++;
         }
@@ -53,11 +53,11 @@ public class ChainedLines {
     }
     public HashSet<Integer> getLineIndexes() {
         lineIndexes.add(this.index);
-        LinkedList<ChainedLines> stack = new LinkedList<>();
+        LinkedList<ChainedLine> stack = new LinkedList<>();
         stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
-            ChainedLines child = stack.pollFirst();
+            ChainedLine child = stack.pollFirst();
             stack.addAll(child.children);
             lineIndexes.add(child.index);
         }
