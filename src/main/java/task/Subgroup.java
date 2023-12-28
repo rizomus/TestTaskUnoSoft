@@ -4,28 +4,33 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Subgroup {
-    int index;
+    final int index;
+    private Subgroup parent = null;
     HashSet<Subgroup> children = new HashSet<>();
+    HashSet<Integer> lineIndexes = new HashSet<>();
+    LinkedList<Subgroup> stack = new LinkedList<>();
+
+    public Subgroup(int index) {
+        this.index = index;
+    }
+
+    public Subgroup getParent() {
+        return parent;
+    }
 
     public Subgroup getUpperParent() {
-        Subgroup prevpar = this.parent;
+        Subgroup upperParent = this.parent;
         if (parent == null) {
             return null;
         } else {
             Subgroup par = this.parent;
             while (par != null) {
-                prevpar = par;
-                par = prevpar.parent;
+                upperParent = par;
+                par = upperParent.parent;
             }
         }
-        this.parent = prevpar;
-        return prevpar;
-    }
-
-    Subgroup parent = null;
-
-    public Subgroup(int index) {
-        this.index = index;
+        this.parent = upperParent;
+        return upperParent;
     }
 
     public void addChildren(Subgroup group) {
@@ -36,8 +41,8 @@ public class Subgroup {
     }
 
     public int size() {
-        LinkedList<Subgroup> stack = new LinkedList<>();
         int count = 1;
+        stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
             Subgroup child = stack.pollFirst();
@@ -47,9 +52,9 @@ public class Subgroup {
         return count;
     }
     public HashSet<Integer> getLineIndexes() {
-        HashSet<Integer> lineIndexes = new HashSet<>();
         lineIndexes.add(this.index);
         LinkedList<Subgroup> stack = new LinkedList<>();
+        stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
             Subgroup child = stack.pollFirst();

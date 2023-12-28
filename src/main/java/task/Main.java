@@ -18,7 +18,7 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-//        String path = args[0];
+        String path = args[0];
 
         LinkedList<String> table = new LinkedList<>();                          // lines from file
         String token;                                                           // [column number + item] (like 3"7894561230")
@@ -26,8 +26,8 @@ public class Main {
         HashSet<Subgroup> groups = new HashSet<>();                             // lines, that need to be transferred to a new group
         HashSet<String> lineSet = new HashSet<>();                              // check for duplicates
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng.txt"))) {
-//        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+//        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line = reader.readLine();
             Pattern pattern = Pattern.compile("\\d+\"+\\d");
 
@@ -51,7 +51,7 @@ public class Main {
 
                             if (seenTokens.containsKey(token)) {
                                 Subgroup oldGroup = seenTokens.get(token);
-                                if (oldGroup.parent != null) {
+                                if (oldGroup.getParent() != null) {
                                     currentGroup.addChildren(oldGroup.getUpperParent());
                                 } else {
                                     currentGroup.addChildren(oldGroup);
@@ -78,7 +78,7 @@ public class Main {
         int groupCount = 0;
 
         for (Subgroup group: groups) {
-            if (group.parent == null) {
+            if (group.getParent() == null) {
                 size = group.size();
                 if (!groupSort.containsKey(size)) {
                     groupSort.put(size, new HashSet<>());
