@@ -33,10 +33,14 @@ public class ChainedLine {
         return upperParent;
     }
 
-    public void addChild(ChainedLine group) {
-        if (group != this) {
-            group.parent = this;
-            this.children.add(group);
+    public void setParent(ChainedLine parent) {
+        this.parent = parent;
+    }
+
+    public void addChild(ChainedLine line) {
+        if (line != this) {
+            line.setParent(this);
+            this.children.add(line);
         }
     }
 
