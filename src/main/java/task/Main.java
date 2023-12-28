@@ -22,8 +22,8 @@ public class Main {
 
         LinkedList<String> table = new LinkedList<>();                          // lines from file
         String token;                                                           // [column number + item] (like 3"7894561230")
-        HashMap<String, Subgroup> seenTokens = new HashMap<>();
-        HashSet<Subgroup> groups = new HashSet<>();                             // lines, that need to be transferred to a new group
+        HashMap<String, Subgroup> tokenGroup = new HashMap<>();
+        HashSet<Subgroup> groups = new HashSet<>();
         HashSet<String> lineSet = new HashSet<>();                              // check for duplicates
 
 //        try (BufferedReader reader = new BufferedReader(new FileReader("c:\\lng.txt"))) {
@@ -43,21 +43,22 @@ public class Main {
                     table.add(line);
                     String[] rowElements = line.split(";");
                     Subgroup currentGroup = new Subgroup(newGroupIndex);
+                    Subgroup oldGroup = null;
                     groups.add(currentGroup);
 
                     for (int i = 0; i < rowElements.length; i++) {
                         if (!(rowElements[i].equals("\"\"") || rowElements[i].equals(""))) {
                             token = i + rowElements[i];
 
-                            if (seenTokens.containsKey(token)) {
-                                Subgroup oldGroup = seenTokens.get(token);
+                            if (tokenGroup.containsKey(token)) {
+                                oldGroup = tokenGroup.get(token);
                                 if (oldGroup.getParent() != null) {
                                     currentGroup.addChildren(oldGroup.getUpperParent());
                                 } else {
                                     currentGroup.addChildren(oldGroup);
                                 }
                             } else {
-                                seenTokens.put(token, currentGroup);
+                                tokenGroup.put(token, currentGroup);
                             }
                         }
                     }
