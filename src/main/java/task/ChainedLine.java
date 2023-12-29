@@ -6,9 +6,9 @@ import java.util.LinkedList;
 public class ChainedLine {
     final int index;
     private ChainedLine parent = null;
-    HashSet<ChainedLine> children = new HashSet<>();
-    HashSet<Integer> lineIndexes = new HashSet<>();
-    LinkedList<ChainedLine> stack = new LinkedList<>();
+    private final HashSet<ChainedLine> children = new HashSet<>();
+    private final HashSet<Integer> lineIndexes = new HashSet<>();
+    private final LinkedList<ChainedLine> stack = new LinkedList<>();
 
     public ChainedLine(int index) {
         this.index = index;
