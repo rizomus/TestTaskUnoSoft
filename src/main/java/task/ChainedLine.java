@@ -57,7 +57,6 @@ public class ChainedLine {
     }
     public HashSet<Integer> getLineIndexes() {
         lineIndexes.add(this.index);
-        LinkedList<ChainedLine> stack = new LinkedList<>();
         stack.clear();
         stack.addAll(this.children);
         while (stack.size() > 0) {
