@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 public class ChainedLine {
-    final int index;
+    private final int index;
     private ChainedLine parent = null;
     private final HashSet<ChainedLine> children = new HashSet<>();
     private final HashSet<Integer> lineIndexes = new HashSet<>();
