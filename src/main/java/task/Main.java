@@ -20,7 +20,7 @@ public class Main {
 
         String path = args[0];
 
-        LinkedList<String> table = new LinkedList<>();                          // lines from file
+        ArrayList<String> table = new ArrayList<>();                          // lines from file
         String token;                                                           // [column number + item] (like 3"7894561230")
         HashMap<String, ChainedLine> tokenLines = new HashMap<>();
         HashSet<ChainedLine> groups = new HashSet<>();
